@@ -81,4 +81,34 @@ class DominioTest {
         assertEquals(PrevisaoMediaMovel.class, media.getClass());
         assertEquals(PrevisaoComparacao.class, comparacao.getClass());
     }
+
+    @Test
+    void comparacaoSemDezLeiturasNaoPreve() {
+        var dados = historico(10, 10, 10, 10, 10, 20, 20, 20, 20);
+        var estrategia = new PrevisaoComparacao();
+
+        assertThrows(FonteIndisponivelException.class,
+                () -> estrategia.prever(dados));
+    }
+
+    @Test
+    void comparacaoNaoRetornaValorNegativo() {
+        var dados = historico(30, 30, 30, 30, 30, 10, 10, 10, 10, 10);
+        var estrategia = new PrevisaoComparacao();
+
+        double previsto = estrategia.prever(dados);
+
+        assertEquals(0, previsto, 0.0001);
+    }
+
+    @Test
+    void comparacaoRespeitaMaximoDoSensor() {
+        var dados = historico(100, 100, 100, 100, 100, 300, 300, 300, 300, 300);
+        var estrategia = new PrevisaoComparacao();
+
+        double previsto = estrategia.prever(dados);
+
+        assertEquals(300, previsto, 0.0001);
+    }
+
 }
