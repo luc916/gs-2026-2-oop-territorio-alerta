@@ -26,4 +26,47 @@ class PersistenciaTest {
         assertEquals(1, alertas.size()); assertEquals(NivelAlerta.CRITICO, alertas.get(0).nivel());
         assertTrue(new MedicaoDAO(segundo).buscarHistoricoPorSensor(TipoSensor.NIVEL_RIO).isEmpty());
     }
+
+    @Test
+    void historicoRetornaEmOrdemCronologica() throws Exception {
+        String url = "jdbc:h2:file:" + pasta.resolve("ordem").toAbsolutePath();
+        var banco = new Banco(url);
+        banco.inicializar();
+        var dao = new MedicaoDAO(banco);
+        var inicio = LocalDateTime.of(2026, 11, 16, 12, 0);
+
+        dao.salvar(new Medicao(TipoSensor.CHUVA, 30, inicio.plusMinutes(20)));
+        dao.salvar(new Medicao(TipoSensor.CHUVA, 10, inicio));
+        dao.salvar(new Medicao(TipoSensor.CHUVA, 20, inicio.plusMinutes(10)));
+
+        var resultado = dao.buscarHistoricoPorSensor(TipoSensor.CHUVA);
+
+        assertEquals(3, resultado.size());
+        assertEquals(inicio, resultado.get(0).instante());
+        assertEquals(inicio.plusMinutes(10), resultado.get(1).instante());
+        assertEquals(inicio.plusMinutes(20), resultado.get(2).instante());
+    }
+
+    @Test
+    void historicoSeparaTiposDeSensor() throws Exception {
+        String url = "jdbc:h2:file:" + pasta.resolve("sensores").toAbsolutePath();
+        var banco = new Banco(url);
+        banco.inicializar();
+        var dao = new MedicaoDAO(banco);
+        var instante = LocalDateTime.of(2026, 11, 16, 12, 0);
+
+        dao.salvar(new Medicao(TipoSensor.CHUVA, 25, instante));
+        dao.salvar(new Medicao(TipoSensor.NIVEL_RIO, 150, instante));
+
+        var chuva = dao.buscarHistoricoPorSensor(TipoSensor.CHUVA);
+        var rio = dao.buscarHistoricoPorSensor(TipoSensor.NIVEL_RIO);
+
+        assertEquals(1, chuva.size());
+        assertEquals(TipoSensor.CHUVA, chuva.get(0).sensor());
+        assertEquals(25, chuva.get(0).valor(), 0.0001);
+        assertEquals(1, rio.size());
+        assertEquals(TipoSensor.NIVEL_RIO, rio.get(0).sensor());
+        assertEquals(150, rio.get(0).valor(), 0.0001);
+    }
+
 }

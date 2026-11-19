@@ -71,7 +71,7 @@ O padrão criacional escolhido foi Factory. `FabricaPrevisao` concentra a criaç
 
 ## Testes
 
-A base contém 21 testes: nove de domínio, onze de serviço e limiares com Mockito e um de persistência em arquivo. Há testes de cálculos conhecidos, histórico mínimo, valores inválidos, código de acesso e níveis de alerta nos limites exatos. O teste de persistência fecha e reabre o banco para consultar medições e alertas.
+O projeto contém 26 testes: doze de domínio, onze de serviço e limiares com Mockito e três de persistência em arquivo. Há testes de cálculos conhecidos, histórico mínimo, valores inválidos, código de acesso e níveis de alerta nos limites exatos. O teste de persistência fecha e reabre o banco para consultar medições e alertas.
 
 Os testes seguem Arrange, Act e Assert. `assertThrows` verifica as exceções customizadas. Os mocks dos DAOs permitem testar a lógica de alerta sem abrir um banco.
 
@@ -82,6 +82,12 @@ O sistema deve se calar quando não dispõe de histórico suficiente. A média m
 Os dados deixam de representar vários aspectos do território. Um ponto de medição não descreve toda a região; relevo, impermeabilização, drenagem e manutenção dos sensores podem mudar a interpretação. O nível do rio é relativo a uma régua simulada, e não a uma cota oficial de inundação. Os limiares iniciais são exemplos acadêmicos e precisariam de calibração com profissionais e séries históricas locais. O programa não verifica automaticamente a idade do histórico, a regularidade dos intervalos ou falhas de calibração. Por isso, a previsão não tem horizonte em horas ou dias validado e não deve ser apresentada como aviso meteorológico real.
 
 Uma ausência de alerta significa apenas que o cálculo não atingiu o limite configurado; não significa que o bairro está seguro. Um alerta precisa mostrar o motivo e permitir que uma pessoa confira as leituras e compare a situação com fontes oficiais e observação local. A equipe responsável conhece fatores sociais e ambientais que não estão no programa. O sistema organiza evidências e ajuda a priorizar investigação, enquanto decisões com consequências importantes continuam humanas. Não há acionamento automático de serviços, restrição de acesso ou identificação de moradores.
+
+## Divisão de tarefas
+
+- Lucas Kenzo Nishiwaki: preparação e organização da base, integração, documentação e conferência da execução, com assistência de IA conforme declarado abaixo.
+- Felipe Hui Hattori: testes dos limites das previsões em `DominioTest.java`.
+- Kauany Ribeiro de Moura: envio de arquivo de testes pelo GitHub. Na integração, o arquivo enviado foi corrigido para os testes Java do OOP, preservando seu commit original.
 
 ## Uso de IA
 

@@ -1,0 +1,8 @@
+Global Solution 2026.2 - Object Oriented Programming
+Projeto: Território Alerta
+
+Lucas Kenzo Nishiwaki - RM 561325
+Felipe Hui Hattori - RM 565169
+Kauany Ribeiro de Moura - RM 564576
+
+GitHub: https://github.com/luc916/gs-2026-2-oop-territorio-alerta
